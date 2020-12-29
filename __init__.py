@@ -1,1 +1,1 @@
-from .baseutils.managedclass import ManagedClass
+from .phorneebaseutils.managedclass import ManagedClass
