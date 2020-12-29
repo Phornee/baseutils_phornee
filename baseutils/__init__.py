@@ -1,1 +1,1 @@
-#from .managedclass import ManagedClass
+from .managedclass import ManagedClass
