@@ -15,10 +15,14 @@ class ManagedClass:
 
     def setupLogger(self, classname,):
         self.logger = logging.getLogger('{}_log'.format(classname))
-        log_path = os.path.join(self.execfolder, self.config['logpath'])
+        log_folder = os.path.join(self.execfolder, self.config['logpath'])
+
+        if not os.path.exists(log_folder):
+            os.mkdir(log_folder)
+
+        log_path = os.path.join(self.execfolder, self.config['logpath'], "{}.log".format(classname))
 
         self.logger.setLevel(logging.INFO)
-        # fh = logging.FileHandler(log_path)
         fh = TimedRotatingFileHandler(log_path, when="D", interval=3, backupCount=10)
         formatter = logging.Formatter('%(asctime)s-%(message)s', '%Y-%m-%d %H:%M:%S')
         fh.setFormatter(formatter)
