@@ -1,5 +1,6 @@
 import os
 import logging
+from logging.handlers import TimedRotatingFileHandler
 import yaml
 from pathlib import Path
 from shutil import copyfile
@@ -17,7 +18,8 @@ class ManagedClass:
         log_path = os.path.join(self.execfolder, self.config['logpath'])
 
         self.logger.setLevel(logging.INFO)
-        fh = logging.FileHandler(log_path)
+        # fh = logging.FileHandler(log_path)
+        fh = TimedRotatingFileHandler(log_path, when="D", interval=3, backupCount=10)
         formatter = logging.Formatter('%(asctime)s-%(message)s', '%Y-%m-%d %H:%M:%S')
         fh.setFormatter(formatter)
         self.logger.addHandler(fh)
