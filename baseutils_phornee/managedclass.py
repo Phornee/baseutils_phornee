@@ -15,6 +15,7 @@ class ManagedClass(ABC):
         if not os.path.exists(self.homevar):
             os.makedirs(self.homevar)
 
+        self.config = None
         self.readConfig()
         self.setupLogger()
 
@@ -49,20 +50,15 @@ class ManagedClass(ABC):
         with open(config_yml_path, 'r') as config_file:
             self.config = yaml.load(config_file, Loader=yaml.FullLoader)
 
-    @classmethod
-    def getHomevarPath(cls):
-        return "{}/var/{}".format(str(Path.home()), cls.getClassName())
+    def getHomevarPath(self):
+        return "{}/var/{}".format(str(Path.home()), self.getClassName())
 
-    @classmethod
-    def getConfig(cls):
-        config_yml_path = os.path.join(cls.getHomevarPath(), 'config.yml')
-        with open(config_yml_path) as config_file:
-            config = yaml.load(config_file, Loader=yaml.FullLoader)
-            return config
+    def getConfig(self):
+        return self.config
 
-    @classmethod
-    def setConfig(cls, config):
-        config_yml_path = os.path.join(cls.getHomevarPath(), 'config.yml')
+    def setConfig(self, config):
+        self.config = config
+        config_yml_path = os.path.join(self.getHomevarPath(), 'config.yml')
 
         with open(config_yml_path, 'w') as config_file:
             yaml.dump(config, config_file)
