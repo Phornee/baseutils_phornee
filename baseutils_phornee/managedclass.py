@@ -2,6 +2,7 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 import yaml
+import copy
 from pathlib import Path
 from shutil import copyfile
 from abc import ABC, abstractmethod
@@ -23,6 +24,9 @@ class ManagedClass(ABC):
     @abstractmethod
     def getClassName(cls):
         pass
+
+    def getHomevarPath(self):
+        return "{}/var/{}".format(str(Path.home()), self.getClassName())
 
     def setupLogger(self):
         self.logger = logging.getLogger('{}_log'.format(self.getClassName()))
@@ -50,14 +54,13 @@ class ManagedClass(ABC):
         with open(config_yml_path, 'r') as config_file:
             self.config = yaml.load(config_file, Loader=yaml.FullLoader)
 
-    def getHomevarPath(self):
-        return "{}/var/{}".format(str(Path.home()), self.getClassName())
-
     def getConfig(self):
-        return self.config
+        return copy.deepcopy(self.config)
 
-    def setConfig(self, config):
+    def setCache(self, config):
         self.config = config
+
+    def writeConfig(self, config):
         config_yml_path = os.path.join(self.getHomevarPath(), 'config.yml')
 
         with open(config_yml_path, 'w') as config_file:
