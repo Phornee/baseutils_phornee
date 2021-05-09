@@ -1,11 +1,10 @@
 import os
-import logging
-from logging.handlers import RotatingFileHandler
 import yaml
 import copy
 from pathlib import Path
 from shutil import copyfile
 from abc import ABC, abstractmethod
+
 
 class ManagedClass(ABC):
 
@@ -18,7 +17,6 @@ class ManagedClass(ABC):
 
         self.config = None
         self.readConfig()
-        self.setupLogger()
 
     @classmethod
     @abstractmethod
@@ -27,21 +25,6 @@ class ManagedClass(ABC):
 
     def getHomevarPath(self):
         return "{}/var/{}".format(str(Path.home()), self.getClassName())
-
-    def setupLogger(self):
-        self.logger = logging.getLogger('{}_log'.format(self.getClassName()))
-        log_folder = os.path.join(self.homevar, self.config['logpath'])
-
-        if not os.path.exists(log_folder):
-            os.mkdir(log_folder)
-
-        log_path = os.path.join(self.homevar, self.config['logpath'], "{}.log".format(self.getClassName()))
-
-        self.logger.setLevel(logging.INFO)
-        fh = RotatingFileHandler(log_path, maxBytes=10000, backupCount=10)
-        formatter = logging.Formatter('%(asctime)s-%(message)s', '%Y-%m-%d %H:%M:%S')
-        fh.setFormatter(formatter)
-        self.logger.addHandler(fh)
 
     def readConfig(self):
         config_yml_path = os.path.join(self.homevar, 'config.yml')
