@@ -6,7 +6,7 @@ from shutil import copyfile
 from abc import ABC, abstractmethod
 
 
-class Config():
+class Config:
 
     def __init__(self, execpath):
         self._installfolder = Path(execpath).parent
@@ -15,36 +15,72 @@ class Config():
         if not os.path.exists(self.homevar):
             os.makedirs(self.homevar)
 
-        self.config = None
-        self.readConfig()
+        self.refresh()
+
 
     @classmethod
     @abstractmethod
     def getClassName(cls):
         pass
 
+    def __getitem__(self, key):
+        return self.config[key]
+
     def getHomevarPath(self):
         return "{}/var/{}".format(str(Path.home()), self.getClassName())
 
-    def readConfig(self):
-        config_yml_path = os.path.join(self.homevar, 'config.yml')
+    def _readConfig(self):
+        # First get default values from template config file
+        config_template_yml_path = os.path.join(self._installfolder, 'config-template.yml')
+        try:
+            # First try to get the template
+            with open(config_template_yml_path, 'r') as config_template_file:
+                template_config = yaml.load(config_template_file, Loader=yaml.FullLoader)
+        except OSError as error:
+            # No template
+            template_config = None
 
-        # If config file doesn't exist yet, create it from the template
-        if not os.path.isfile(config_yml_path):
-            config_template_yml_path = os.path.join(self._installfolder, 'config-template.yml')
-            copyfile(config_template_yml_path, config_yml_path)
+        # Try to get the config
+        try:
+            config_yml_path = os.path.join(self.homevar, 'config.yml')
+            with open(config_yml_path, 'r') as config_file:
+                config = yaml.load(config_file, Loader=yaml.FullLoader)
+        except OSError as error:
+            config = None
 
-        with open(config_yml_path, 'r') as config_file:
-            self.config = yaml.load(config_file, Loader=yaml.FullLoader)
+        if config:
+            if template_config:
+                self._mergeConfig(config, template_config)
+                return template_config
+            else:
+                return config
+        else:
+            if template_config:
+                return template_config
+            else:
+                return None
 
-    def getConfig(self):
-        return copy.deepcopy(self.config)
+    def refresh(self):
+        self.config = self._readConfig()
 
-    def setCache(self, config):
-        self.config = config
+    def _mergeConfig(self, source_config, dest_config):
+        #Update keys
+        for key, value in source_config.items():
+            dest_config[key] = value
 
-    def writeConfig(self, config):
+    def update(self, config_update):
+        #Read fresh config file to be updated
+        new_config = self._readConfig()
+
+        #Update keys
+        self._mergeConfig(config_update, new_config)
+
         config_yml_path = os.path.join(self.getHomevarPath(), 'config.yml')
+        try:
+            with open(config_yml_path, 'w') as config_file:
+                yaml.dump(new_config, config_file)
+                self.config = new_config
 
-        with open(config_yml_path, 'w') as config_file:
-            yaml.dump(config, config_file)
+        except OSError as error:
+            pass
+

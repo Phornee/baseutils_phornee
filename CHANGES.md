@@ -1,0 +1,4 @@
+- 0.0.10:
+  - https://phornee.atlassian.net/jira/software/projects/PIW/boards/1?selectedIssue=PIW-10
+  - Config class created, now uses templates as default, and overwrite with config
+  - refresh method created
