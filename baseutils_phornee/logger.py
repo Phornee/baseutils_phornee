@@ -2,8 +2,14 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
+import time
 
-class Logger():
+
+class UTCFormatter(logging.Formatter):
+    converter = time.gmtime
+
+
+class Logger:
 
     def __init__(self, log_config):
         self.config = log_config
@@ -27,6 +33,10 @@ class Logger():
 
         self.logger.setLevel(logging.INFO)
         fh = RotatingFileHandler(self.getLogPath(), maxBytes=10000, backupCount=10)
+
+        # Uncomment for UTC logging
+        #formatter = UTCFormatter('%(asctime)s-%(message)s', '%Y-%m-%d %H:%M:%S')
+
         formatter = logging.Formatter('%(asctime)s-%(message)s', '%Y-%m-%d %H:%M:%S')
         fh.setFormatter(formatter)
         self.logger.addHandler(fh)
