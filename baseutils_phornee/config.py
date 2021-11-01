@@ -8,9 +8,9 @@ from abc import ABC, abstractmethod
 
 class Config:
 
-    def __init__(self, execpath):
-        self._installfolder = Path(execpath).parent
-        self.homevar = "{}/var/{}".format(str(Path.home()), self.getClassName())
+    def __init__(self, conf_config):
+        self._installfolder = Path(conf_config['execpath']).parent
+        self.homevar = "{}/var/{}".format(str(Path.home()), conf_config['modulename'])
 
         if not os.path.exists(self.homevar):
             os.makedirs(self.homevar)
