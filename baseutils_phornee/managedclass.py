@@ -15,9 +15,6 @@ class ManagedClass(ABC):
         if not os.path.exists(self.homevar):
             os.makedirs(self.homevar)
 
-        self.config = None
-        self.readConfig()
-
     @classmethod
     @abstractmethod
     def getClassName(cls):
@@ -25,30 +22,6 @@ class ManagedClass(ABC):
 
     def getHomevarPath(self):
         return "{}/var/{}".format(str(Path.home()), self.getClassName())
-
-    def readConfig(self):
-        config_yml_path = os.path.join(self.homevar, 'config.yml')
-
-        # If config file doesn't exist yet, create it from the template
-        if not os.path.isfile(config_yml_path):
-            config_template_yml_path = os.path.join(self._installfolder, 'config-template.yml')
-            copyfile(config_template_yml_path, config_yml_path)
-
-        with open(config_yml_path, 'r') as config_file:
-            self.config = yaml.load(config_file, Loader=yaml.FullLoader)
-
-    def getConfig(self):
-        return copy.deepcopy(self.config)
-
-    def setCache(self, config):
-        self.config = config
-
-    def writeConfig(self, config):
-        config_yml_path = os.path.join(self.getHomevarPath(), 'config.yml')
-
-        with open(config_yml_path, 'w') as config_file:
-            yaml.dump(config, config_file)
-
 
     def is_raspberry_pi(self, raise_on_errors=False):
         """Checks if Raspberry PI.

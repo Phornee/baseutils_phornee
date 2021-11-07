@@ -17,7 +17,6 @@ class Config:
 
         self.refresh()
 
-
     @classmethod
     @abstractmethod
     def getClassName(cls):
@@ -26,8 +25,8 @@ class Config:
     def __getitem__(self, key):
         return self.config[key]
 
-    def getHomevarPath(self):
-        return "{}/var/{}".format(str(Path.home()), self.getClassName())
+    def getDict(self):
+        return self.config
 
     def _readConfig(self):
         # First get default values from template config file
@@ -75,7 +74,7 @@ class Config:
         #Update keys
         self._mergeConfig(config_update, new_config)
 
-        config_yml_path = os.path.join(self.getHomevarPath(), 'config.yml')
+        config_yml_path = os.path.join(self.homevar, 'config.yml')
         try:
             with open(config_yml_path, 'w') as config_file:
                 yaml.dump(new_config, config_file)
