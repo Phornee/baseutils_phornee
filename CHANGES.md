@@ -4,3 +4,5 @@
   - refresh method created
 - 0.0.12:
   - Fix config initialization
+- 0.0.13:
+  - Fix config functions

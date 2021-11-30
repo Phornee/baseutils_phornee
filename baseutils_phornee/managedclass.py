@@ -37,9 +37,6 @@ class ManagedClass(ABC):
         with open(config_yml_path, 'r') as config_file:
             self.config = yaml.load(config_file, Loader=yaml.FullLoader)
 
-    def getConfig(self):
-        return copy.deepcopy(self.config)
-
     def setCache(self, config):
         self.config = config
 

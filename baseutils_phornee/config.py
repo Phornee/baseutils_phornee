@@ -23,6 +23,9 @@ class Config:
     def getClassName(cls):
         pass
 
+    def getAll(self):
+        return copy.deepcopy(self.config)
+
     def __getitem__(self, key):
         return self.config[key]
 
