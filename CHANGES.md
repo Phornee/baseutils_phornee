@@ -6,3 +6,5 @@
   - Fix config initialization
 - 0.0.13:
   - Fix config functions
+- 0.0.15:
+  - Config changes

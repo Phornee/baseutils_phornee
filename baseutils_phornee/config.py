@@ -15,21 +15,21 @@ class Config:
         if not os.path.exists(self.homevar):
             os.makedirs(self.homevar)
 
-        self.refresh()
+        self._readConfig()
 
     @classmethod
     @abstractmethod
     def getClassName(cls):
         pass
 
-    def getAll(self):
-        return copy.deepcopy(self.config)
-
     def __getitem__(self, key):
         return self.config[key]
 
     def getDict(self):
         return self.config
+
+    def getDictCopy(self):
+        return copy.deepcopy(self.config)
 
     def _readConfig(self):
         # First get default values from template config file
@@ -53,17 +53,18 @@ class Config:
         if config:
             if template_config:
                 self._mergeConfig(config, template_config)
-                return template_config
+                self.config = template_config
             else:
-                return config
-        else:
-            if template_config:
-                return template_config
+                self.config = config
+        else:  # No previous config
+            if template_config:  # If config file doesn´t exist, but template does, write config with template content
+                self.write(template_config)
+                self.config = template_config
             else:
-                return None
+                self.config = None
 
     def refresh(self):
-        self.config = self._readConfig()
+        self._readConfig()
 
     def _mergeConfig(self, source_config, dest_config):
         #Update keys
@@ -71,18 +72,17 @@ class Config:
             dest_config[key] = value
 
     def update(self, config_update):
-        #Read fresh config file to be updated
-        new_config = self._readConfig()
-
         #Update keys
-        self._mergeConfig(config_update, new_config)
+        self._mergeConfig(config_update, self.config)
 
+    def _prepareWritting(self):
+        return self.config
+
+    def write(self):
+        configtowrite = self._prepareWritting()
         config_yml_path = os.path.join(self.homevar, 'config.yml')
         try:
             with open(config_yml_path, 'w') as config_file:
-                yaml.dump(new_config, config_file)
-                self.config = new_config
-
+                yaml.dump(configtowrite, config_file)
         except OSError as error:
             pass
-
