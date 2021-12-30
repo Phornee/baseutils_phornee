@@ -15,6 +15,8 @@ class Config:
         if not os.path.exists(self.homevar):
             os.makedirs(self.homevar)
 
+        self.config = {}
+
         self._readConfig()
 
     @classmethod
@@ -58,10 +60,8 @@ class Config:
                 self.config = config
         else:  # No previous config
             if template_config:  # If config file doesn´t exist, but template does, write config with template content
-                self.write(template_config)
-                self.config = template_config
-            else:
-                self.config = None
+                self.update(template_config)
+                self.write()
 
     def refresh(self):
         self._readConfig()
