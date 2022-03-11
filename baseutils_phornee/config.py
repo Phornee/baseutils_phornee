@@ -25,7 +25,7 @@ class Config:
         pass
 
     def __getitem__(self, key):
-        return self.config[key]
+        return self.config.get(key, None)
 
     def getDict(self):
         return self.config
