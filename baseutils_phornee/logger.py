@@ -22,10 +22,10 @@ class Logger:
         self.setupLogger()
 
     def getLogPath(self):
-        return os.path.join(self.homevar, self.config['logpath'], "{}.log".format(self.config['modulename']))
+        return os.path.join(self.homevar, self.config['logpath'], "{}.log".format(self.config['logname']))
 
     def setupLogger(self):
-        self.logger = logging.getLogger('{}_log'.format(self.config['modulename']))
+        self.logger = logging.getLogger('{}_{}_log'.format(self.config['modulename'], self.config['logname']))
         log_folder = os.path.join(self.homevar, self.config['logpath'])
 
         if not os.path.exists(log_folder):

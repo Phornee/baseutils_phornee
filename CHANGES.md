@@ -8,3 +8,5 @@
   - Fix config functions
 - 0.0.15:
   - Config changes
+- 0.0.17:
+  - Support for different loggers for same package
