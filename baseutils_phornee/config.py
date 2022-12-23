@@ -67,12 +67,12 @@ class Config:
         self._readConfig()
 
     def _mergeConfig(self, source_config, dest_config):
-        #Update keys
+        # Update keys
         for key, value in source_config.items():
             dest_config[key] = value
 
     def update(self, config_update):
-        #Update keys
+        # Update keys
         self._mergeConfig(config_update, self.config)
 
     def _prepareWritting(self):
