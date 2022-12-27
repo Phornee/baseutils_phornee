@@ -66,7 +66,6 @@ class Config:
             config = None
 
         if config:
-            raise Exception("*** config")
             if template_config:
                 self._mergeConfig(config, template_config)
                 self.config = template_config

@@ -74,7 +74,7 @@ class Testing(unittest.TestCase):
 
         # Instatiate a config file from scratch, based only on template
         # Will be automatically writen to file
-        template_path = '{}\\data\\config_template.yml'.format(Path(__file__).parent)
+        template_path = '{}/data/config_template.yml'.format(Path(__file__).parent)
         config = Config(package_name='baseutils_tests', 
                         template_path=template_path, 
                         config_file_name='config_new.yml')
@@ -93,12 +93,12 @@ class Testing(unittest.TestCase):
 
     def test_update_config(self):
         # Copy already-made config to var destination
-        existing_path = '{}\\data\\config_existing.yml'.format(Path(__file__).parent)
+        existing_path = '{}/data/config_existing.yml'.format(Path(__file__).parent)
         var_config_path = Config.getConfigPath('baseutils_tests', 'config_existing.yml')
         shutil.copy(existing_path, var_config_path)
 
         # Instatiate a config file from scratch, with an updated template, with an existing config
-        template_path = '{}\\data\\config_template.yml'.format(Path(__file__).parent)
+        template_path = '{}/data/config_template.yml'.format(Path(__file__).parent)
         config = Config(package_name='baseutils_tests', 
                         template_path=template_path, 
                         config_file_name='config_existing.yml')
