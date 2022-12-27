@@ -1,9 +1,17 @@
 import unittest
 import os
+import sys
 import yaml
 from pathlib import Path
 from baseutils_phornee import Config
 import shutil
+
+import logging
+
+log = logging.getLogger('baseutils_phornee')
+sh = logging.StreamHandler(sys.stdout)
+log.addHandler(sh)
+log.setLevel(logging.INFO)
 
 class Testing(unittest.TestCase):
 

@@ -3,6 +3,9 @@ import yaml
 import copy
 from pathlib import Path
 
+import logging
+
+log = logging.getLogger(__name__)
 
 class Config:
     """ Manages a config file that will be generated in the /var/ folder
@@ -104,6 +107,7 @@ class Config:
 
     def write(self):
         config_yml_path = os.path.join(self.homevar, self._config_file_name)
+        log.info("Writting to {}".format(config_yml_path))
         try:
             with open(config_yml_path, 'w') as config_file:
                 yaml.dump(self.config, config_file)
