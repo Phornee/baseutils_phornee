@@ -13,6 +13,9 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Phornee/baseutils_phornee",
     packages=setuptools.find_packages(),
+    package_data={
+        '': ['*.yml'],
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

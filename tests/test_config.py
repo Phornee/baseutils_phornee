@@ -79,7 +79,7 @@ class Testing(unittest.TestCase):
                     template_config_read = yaml.load(template_config_file, Loader=yaml.FullLoader)
                     self.assertEqual(config_read, template_config_read)
         except Exception as e:
-            self.assertFalse()
+            self.assertFalse('File not found: {}'.format(e))
         finally:
             os.remove(Config.getConfigPath('baseutils_tests', 'config_new.yml'))
 
@@ -113,7 +113,7 @@ class Testing(unittest.TestCase):
                                 'key_template3': 'new in config'}
                 self.assertEqual(config_read, expected_merged)
         except Exception as e:
-                self.assertFalse()
+            self.assertFalse('File not found: {}'.format(e))
         finally:
             os.remove(Config.getConfigPath('baseutils_tests', 'config_existing.yml'))
 
