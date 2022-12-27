@@ -108,6 +108,7 @@ class Config:
 
     def write(self):
         config_yml_path = os.path.join(self.homevar, self._config_file_name)
+        raise Exception("Writting to {}".format(config_yml_path))
         log.info("Writting to {}".format(config_yml_path))
         try:
             with open(config_yml_path, 'w') as config_file:
