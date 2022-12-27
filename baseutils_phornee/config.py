@@ -65,12 +65,14 @@ class Config:
             config = None
 
         if config:
+            raise Exception("*** config")
             if template_config:
                 self._mergeConfig(config, template_config)
                 self.config = template_config
             else:
                 self.config = config
         else:  # No previous config
+            raise Exception("*** NO config")
             if template_config:  # If config file doesn´t exist, but template does, write config with template content
                 self.update(template_config)
                 self.write()
@@ -108,7 +110,6 @@ class Config:
 
     def write(self):
         config_yml_path = os.path.join(self.homevar, self._config_file_name)
-        raise Exception("Writting to {}".format(config_yml_path))
         log.info("Writting to {}".format(config_yml_path))
         try:
             with open(config_yml_path, 'w') as config_file:
