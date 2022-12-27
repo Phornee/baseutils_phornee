@@ -99,7 +99,7 @@ class Config:
             dest_config = source_config
 
     def update(self, config_update):
-        #Update keys
+        # Update keys
         self._mergeConfig(config_update, self.config)
 
     def write(self):
