@@ -19,6 +19,7 @@ class Config:
             template_path (str): Path of the template file
             config_path (str): Name of config file (will be placed in home/var/{modulename} folder)
         """
+        log.info('Initializing....')
         self._template_path = template_path
         self._config_file_name = config_file_name
         self.homevar = "{}/var/{}".format(str(Path.home()), package_name)
