@@ -14,7 +14,7 @@ setuptools.setup(
     url="https://github.com/Phornee/baseutils_phornee",
     packages=setuptools.find_packages(),
     package_data={
-        '': ['*.yml'], 'tests/data/': ['*.yml']
+        '': ['*.yml'], 'tests/data': ['*.yml']
     },
     classifiers=[
         "Programming Language :: Python :: 3",
