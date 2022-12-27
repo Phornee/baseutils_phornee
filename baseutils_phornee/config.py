@@ -72,8 +72,8 @@ class Config:
             else:
                 self.config = config
         else:  # No previous config
-            raise Exception("*** NO config")
             if template_config:  # If config file doesn´t exist, but template does, write config with template content
+                raise Exception("*** NO config AND template")
                 self.update(template_config)
                 self.write()
 
