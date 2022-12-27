@@ -54,6 +54,7 @@ class Config:
                 template_config = yaml.load(config_template_file, Loader=yaml.FullLoader)
         except OSError as error:
             # No template
+            raise Exception("*** NO template {}".format(config_template_yml_path))
             template_config = None
 
         # Try to get the config
@@ -73,7 +74,6 @@ class Config:
                 self.config = config
         else:  # No previous config
             if template_config:  # If config file doesn´t exist, but template does, write config with template content
-                raise Exception("*** NO config AND template")
                 self.update(template_config)
                 self.write()
 
