@@ -24,7 +24,7 @@ jobs:
       - name: Set up Python in a virtual env
         run: |
           if [[ `uname` != "Darwin" ]]; then sudo apt -y install python3-venv; fi
-          python3 -m venv .env
+          python3 -m venv .runnerenv
       
       # Installs and upgrades pip, installs other dependencies and installs the package from setup.py
       - name: "Installs and upgrades pip, installs other dependencies and installs the package from setup.py"
