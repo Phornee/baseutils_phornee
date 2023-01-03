@@ -25,7 +25,7 @@ jobs:
         run: |
           if [[ `uname` != "Darwin" ]]; then sudo apt -y install python3-venv; fi
           #python3 -m venv .runnerenv
-          source ./.runnerenv/bin/activate
+          source /home/pi/actions-runner/.runnerenv/bin/activate
       
       # Installs and upgrades pip, installs other dependencies and installs the package from setup.py
       - name: "Installs and upgrades pip, installs other dependencies and installs the package from setup.py"
