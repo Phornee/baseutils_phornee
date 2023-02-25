@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="baseutils_phornee",
-    version="0.1.0",
+    version="0.1.1",
     author="Ismael Raya",
     author_email="phornee@gmail.com",
     description="Utility modules for Class management",
@@ -14,7 +14,7 @@ setuptools.setup(
     url="https://github.com/Phornee/baseutils_phornee",
     packages=setuptools.find_packages(),
     package_data={
-        '': ['*.yml'], 'tests': ['data/*.yml']
+        'tests': ['data/*.yml']
     },
     classifiers=[
         "Programming Language :: Python :: 3",

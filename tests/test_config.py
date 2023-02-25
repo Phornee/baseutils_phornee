@@ -13,39 +13,39 @@ sh = logging.StreamHandler(sys.stdout)
 log.addHandler(sh)
 log.setLevel(logging.INFO)
 
+
 class Testing(unittest.TestCase):
 
     def test_yaml_merge_dictionary(self):
         # Root is dictionary
-        config_template = {'single' : 'singlevalue', 
-                           'singlemerge': 'template', 
-                           'fruits': ['orange','apple', 'banana']}
-        config1 = {'vehicles' : ['car', 'truck'], 
-                  'fruits' :['mango'], 
-                  'single2' : 'singlevalue2', 
-                  'singlemerge': 'second'}
+        config_template = {'single': 'singlevalue',
+                           'singlemerge': 'template',
+                           'fruits': ['orange', 'apple', 'banana']}
+        config1 = {'vehicles': ['car', 'truck'],
+                   'fruits': ['mango'],
+                   'single2': 'singlevalue2',
+                   'singlemerge': 'second'}
         Config._mergeConfig(config1, config_template)
 
-
-        expected_value = {'single': 'singlevalue', 
-                          'singlemerge': 'second', 
-                          'fruits': ['orange', 'apple', 'banana', 'mango'], 
-                          'vehicles': ['car', 'truck'], 
+        expected_value = {'single': 'singlevalue',
+                          'singlemerge': 'second',
+                          'fruits': ['orange', 'apple', 'banana', 'mango'],
+                          'vehicles': ['car', 'truck'],
                           'single2': 'singlevalue2'}
 
         self.assertEqual(config_template, expected_value)
-    
+   
     def test_yaml_merge_list(self):
         # Root is list
         config_template = [
-                            {'single' : 'singlevalue', 
-                            'singlemerge': 'template', 
-                            'fruits': ['orange','apple', 'banana']},
-                            {'single2' : 'singlevalue2', 
-                            'singlemerge2': 'template', 
-                            'fruits2': ['mango','lemon', 'banana']},
+                            {'single': 'singlevalue',
+                             'singlemerge': 'template',
+                             'fruits': ['orange', 'apple', 'banana']},
+                            {'single2': 'singlevalue2',
+                             'singlemerge2': 'template',
+                             'fruits2': ['mango', 'lemon', 'banana']},
                            ]
-        config_mismatch = {'test' : 'test'}
+        config_mismatch = {'test': 'test'}
         try:
             Config._mergeConfig(config_mismatch, config_template)
         except Exception as e:
@@ -54,16 +54,22 @@ class Testing(unittest.TestCase):
             self.assertFalse("Exception should be raised, and was not.")
 
         config_template2 = [
-                            {'single3' : 'singlevalue', 
-                            'singlemerge': 'template', 
-                            'fruits': ['orange','apple', 'banana']}
+                            {'single3': 'singlevalue',
+                             'singlemerge': 'template',
+                             'fruits': ['orange', 'apple', 'banana']}
                            ]
         Config._mergeConfig(config_template2, config_template)
 
         expected_merge = [
-                            {'single': 'singlevalue', 'singlemerge': 'template', 'fruits': ['orange','apple', 'banana']},
-                            {'single2': 'singlevalue2', 'singlemerge2': 'template', 'fruits2': ['mango','lemon', 'banana']}, 
-                            {'single3': 'singlevalue', 'singlemerge': 'template', 'fruits': ['orange','apple', 'banana']}]
+                            {'single': 'singlevalue',
+                             'singlemerge': 'template',
+                             'fruits': ['orange', 'apple', 'banana']},
+                            {'single2': 'singlevalue2',
+                             'singlemerge2': 'template',
+                             'fruits2': ['mango', 'lemon', 'banana']},
+                            {'single3': 'singlevalue',
+                             'singlemerge': 'template', 
+                             'fruits': ['orange', 'apple', 'banana']}]
         self.assertEqual(config_template, expected_merge)
 
     def test_from_scrath(self):
@@ -104,8 +110,8 @@ class Testing(unittest.TestCase):
                         config_file_name='config_existing.yml')
 
         expected_merged = {'key_template1': 'template', 
-                            'key_template2': 'changed', 
-                            'key_template3': 'new in config'}
+                           'key_template2': 'changed', 
+                           'key_template3': 'new in config'}
 
         # Check memory matches
         self.assertEqual(config.getDict(), expected_merged)
@@ -116,9 +122,9 @@ class Testing(unittest.TestCase):
             # Check that resulting config file equals the template file
             with open(var_config_path, 'r') as config_file:
                 config_read = yaml.load(config_file, Loader=yaml.FullLoader)
-                expected_merged = {'key_template1': 'template', 
-                                'key_template2': 'changed', 
-                                'key_template3': 'new in config'}
+                expected_merged = {'key_template1': 'template',
+                                   'key_template2': 'changed',
+                                   'key_template3': 'new in config'}
                 self.assertEqual(config_read, expected_merged)
         except Exception as e:
             self.assertFalse('File not found: {}'.format(e))

@@ -19,10 +19,9 @@ class Config:
             template_path (str): Path of the template file
             config_path (str): Name of config file (will be placed in home/var/{modulename} folder)
         """
-        log.info('Initializing....')
         self._template_path = template_path
         self._config_file_name = config_file_name
-        self.homevar = "{}/var/{}".format(str(Path.home()), package_name)
+        self.homevar = os.path.join(str(Path.home()), 'var', package_name)
 
         if not os.path.exists(self.homevar):
             os.makedirs(self.homevar)
@@ -36,7 +35,7 @@ class Config:
 
     @staticmethod
     def getConfigPath(package_name: str, config_file_name: str) -> str:
-        return "{}/var/{}/{}".format(str(Path.home()), package_name, config_file_name)
+        return os.path.join(str(Path.home()), 'var', package_name, config_file_name)
 
     def getDict(self) -> dict:
         return self.config
@@ -54,7 +53,6 @@ class Config:
                 template_config = yaml.load(config_template_file, Loader=yaml.FullLoader)
         except OSError as error:
             # No template
-            raise Exception("*** NO template {}".format(config_template_yml_path))
             template_config = None
 
         # Try to get the config
@@ -109,7 +107,6 @@ class Config:
 
     def write(self):
         config_yml_path = os.path.join(self.homevar, self._config_file_name)
-        log.info("Writting to {}".format(config_yml_path))
         try:
             with open(config_yml_path, 'w') as config_file:
                 yaml.dump(self.config, config_file)
