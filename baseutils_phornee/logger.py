@@ -25,7 +25,7 @@ class Logger:
                        utc: bool = False):
         self.log_file_name = log_file_name
 
-        self.homevar = "{}/var/log/{}".format(str(Path.home()), package_name)
+        self.homevar = os.path.join(str(Path.home()), 'var', 'log', package_name)
         self.package_name = package_name
 
         if not os.path.exists(self.homevar):

@@ -11,21 +11,23 @@ jobs:
   build-n-publish:
     name: Build and publish Python distributions to PyPI
     # The type of runner that the job will run on
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@master
-      #- name: Set up python 3.9
-      #  uses: actions/setup-python@v3
-      #  with:
-      #    python-version: "3.9"
-      - name: Set up Python in a virtual env
-        run: |
-          if [[ `uname` != "Darwin" ]]; then sudo apt -y install python3-venv; fi
-          #python3 -m venv .runnerenv
-          source /home/pi/actions-runner/.runnerenv/bin/activate
+      
+      - name: Set up python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+      
+      #- name: Set up Python in a virtual env
+      #  run: |
+      #    if [[ `uname` != "Darwin" ]]; then sudo apt -y install python3-venv; fi
+      #    #python3 -m venv .runnerenv
+      #    source /home/pi/actions-runner/.runnerenv/bin/activate
       
       # Installs and upgrades pip, installs other dependencies and installs the package from setup.py
       - name: "Installs and upgrades pip, installs other dependencies and installs the package from setup.py"

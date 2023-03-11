@@ -18,8 +18,8 @@ class Testing(unittest.TestCase):
 
     def test_yaml_merge_dictionary(self):
         # Root is dictionary
-        config_template = {'single': 'singlevalue', 
-                           'singlemerge': 'template', 
+        config_template = {'single': 'singlevalue',
+                           'singlemerge': 'template',
                            'fruits': ['orange', 'apple', 'banana']}
         config1 = {'vehicles': ['car', 'truck'],
                    'fruits': ['mango'],
@@ -34,7 +34,7 @@ class Testing(unittest.TestCase):
                           'single2': 'singlevalue2'}
 
         self.assertEqual(config_template, expected_value)
-
+   
     def test_yaml_merge_list(self):
         # Root is list
         config_template = [
@@ -61,13 +61,15 @@ class Testing(unittest.TestCase):
         Config._mergeConfig(config_template2, config_template)
 
         expected_merge = [
-                            {'single': 'singlevalue', 'singlemerge': 'template',
+                            {'single': 'singlevalue',
+                             'singlemerge': 'template',
                              'fruits': ['orange', 'apple', 'banana']},
-                            {'single2': 'singlevalue2', 'singlemerge2': 'template',
+                            {'single2': 'singlevalue2',
+                             'singlemerge2': 'template',
                              'fruits2': ['mango', 'lemon', 'banana']},
-                            {'single3': 'singlevalue', 'singlemerge': 'template',
-                             'fruits': ['orange', 'apple', 'banana']}
-                         ]
+                            {'single3': 'singlevalue',
+                             'singlemerge': 'template', 
+                             'fruits': ['orange', 'apple', 'banana']}]
         self.assertEqual(config_template, expected_merge)
 
     def test_from_scrath(self):
@@ -107,8 +109,8 @@ class Testing(unittest.TestCase):
                         template_path=template_path,
                         config_file_name='config_existing.yml')
 
-        expected_merged = {'key_template1': 'template',
-                           'key_template2': 'changed',
+        expected_merged = {'key_template1': 'template', 
+                           'key_template2': 'changed', 
                            'key_template3': 'new in config'}
 
         # Check memory matches
