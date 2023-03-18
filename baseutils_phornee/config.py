@@ -1,11 +1,12 @@
+""" Config class """
 import os
-import yaml
 import copy
 from pathlib import Path
-
 import logging
+import yaml
 
 log = logging.getLogger(__name__)
+
 
 class Config:
     """ Manages a config file that will be generated in the /var/ folder
@@ -28,44 +29,58 @@ class Config:
 
         self.config = {}
 
-        self._readConfig()
+        self._read_config()
 
     def __getitem__(self, key):
         return self.config.get(key, None)
 
     @staticmethod
-    def getConfigPath(package_name: str, config_file_name: str) -> str:
+    def get_config_path(package_name: str, config_file_name: str) -> str:
+        """Get the path for the config, inside the homevar path
+        Args:
+            package_name (str): The name of the package... will be joined after the homevar
+            config_file_name (str): Name of the config file itself (without folder... just the file name)
+
+        Returns:
+            str: The path of the config file
+        """
         return os.path.join(str(Path.home()), 'var', package_name, config_file_name)
 
-    def getDict(self) -> dict:
+    def get_dict(self) -> dict:
+        """Returns the config  dictionary
+        Returns:
+            dict: Config
+        """
         return self.config
 
-    def getDictCopy(self) -> dict:
+    def get_dict_copy(self) -> dict:
+        """Returns a copy of the dictionary
+        Returns:
+            dict: Copy of the config
+        """
         return copy.deepcopy(self.config)
 
-    def _readConfig(self):
+    def _read_config(self):
         # First get default values from template config file
-        # config_template_yml_path = os.path.join(self._installfolder, 'config-template.yml')
-        config_template_yml_path = self._template_path
         try:
             # First try to get the template
-            with open(config_template_yml_path, 'r') as config_template_file:
+            with open(self._template_path, 'r', encoding="utf-8") as config_template_file:
                 template_config = yaml.load(config_template_file, Loader=yaml.FullLoader)
-        except OSError as error:
+        except OSError:
             # No template
             template_config = None
 
         # Try to get the config
         try:
             config_yml_path = os.path.join(self.homevar, self._config_file_name)
-            with open(config_yml_path, 'r') as config_file:
+            with open(config_yml_path, 'r', encoding="utf-8") as config_file:
                 config = yaml.load(config_file, Loader=yaml.FullLoader)
-        except OSError as error:
+        except OSError:
             config = None
 
         if config:
             if template_config:
-                self._mergeConfig(config, template_config)
+                self._merge_config(config, template_config)
                 self.config = template_config
             else:
                 self.config = config
@@ -75,26 +90,35 @@ class Config:
                 self.write()
 
     def refresh(self):
-        self._readConfig()
+        """Force to read again the config file (and template)
+        """
+        self._read_config()
 
     @staticmethod
-    def _mergeConfig(source_config, dest_config):
+    def _merge_config(source_config: dict, dest_config: dict):
+        """Merges one config dictionaty into another
+
+        Args:
+            source_config (dict): Source dictionary to merge
+            dest_config (dict): Destination dictionary to be modified with the source one
+        """
         # if type(source_config) != type(dest_config):
-        #     raise Exception('Source and destination configs dont match its data types: {} vs {}'.format(source_config, dest_config))
-        #Update keys
-        if type(dest_config) == dict:
+        #     raise Exception('Source and destination configs dont match its data types: {} vs {}'
+        #                     .format(source_config, dest_config))
+        # Update keys
+        if isinstance(dest_config, dict):
             for key, value in source_config.items():
                 if key not in dest_config:
-                    if type(value) == dict:
-                        dest_config[key] = {}  
-                    elif type(value) == list:
+                    if isinstance(value, dict):
+                        dest_config[key] = {}
+                    elif isinstance(value, list):
                         dest_config[key] = []
                 if type(value) in [int, str]:
                     dest_config[key] = value
-                Config._mergeConfig(source_config[key], dest_config[key])      
-        elif type(dest_config) == list:
-            if type(source_config) != list:
-                raise
+                Config._merge_config(source_config[key], dest_config[key])
+        elif isinstance(dest_config, list):
+            if not isinstance(source_config, list):
+                raise TypeError()
             for elem in source_config:
                 if elem not in dest_config:
                     dest_config.append(elem)
@@ -102,20 +126,27 @@ class Config:
             dest_config = source_config
 
     def update(self, config_update):
+        """Update the config with new data
+        Args:
+            config_update (dict): Values to modify
+        """
         # Update keys
-        self._mergeConfig(config_update, self.config)
+        self._merge_config(config_update, self.config)
 
     def write(self):
+        """Write to disk the memory config 
+        """
         config_yml_path = os.path.join(self.homevar, self._config_file_name)
         try:
-            with open(config_yml_path, 'w') as config_file:
+            with open(config_yml_path, 'w', encoding="utf-8") as config_file:
                 yaml.dump(self.config, config_file)
-        except OSError as error:
+        except OSError:
             pass
 
     def delete(self):
+        """ Delete the config file """
         config_yml_path = os.path.join(self.homevar, self._config_file_name)
         try:
             os.remove(config_yml_path)
-        except OSError as error:
+        except OSError:
             pass
